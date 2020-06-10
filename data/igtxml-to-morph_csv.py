@@ -46,10 +46,14 @@ def get_morphs(word,xmlfile):
 def main():
 	with open("segmented.csv", "w") as csvfile:
 		writer = csv.writer(csvfile)
+
+		n = 1
 	
 		for xmlfile in xml_files:
 
-			print("processing: " + xmlfile)
+			print("processing " + n + " of 21: " + xmlfile)
+
+			n = n + 1
 
 			for w in get_words(xmlfile):
 				wm = get_morphs(w,xmlfile)
