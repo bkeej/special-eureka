@@ -37,7 +37,7 @@ def get_morphs(word,xmlfile):
 				if word.get('wd_id') + "_" in m.get('morph_id'):
 					word_morphs.append(m.get('text'))
 			break
-	return word(word_morphs)
+	return word_morphs
 
 #
 # Main
@@ -47,7 +47,13 @@ def main():
 	
 	xmlfile = '1.xml'
 	for w in get_words(xmlfile):
-		get_morphs(w,xmlfile)
+		wm = get_morphs(w,xmlfile)
+		wm = list(filter(lambda ch: ch not in "-", wm))
+		for i in range(len(wm)):
+			wm[i] = wm[i].lower()
+			wm[i] = ''.join(list(filter(lambda ch: ch not in " +.!¡¿?-,", wm[i])))
+		print(wm)
+
 
 if __name__ == '__main__':
 	main() 
