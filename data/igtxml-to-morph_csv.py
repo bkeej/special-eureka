@@ -38,8 +38,6 @@ def get_morphs(word,xmlfile):
 					word_morphs.append(m.get('text'))
 			break
 	return word(word_morphs)
-			# print(phrase.get('phrase_ref'), word.get('wd_id'))
-
 
 #
 # Main
