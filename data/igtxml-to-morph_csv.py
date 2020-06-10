@@ -44,16 +44,23 @@ def get_morphs(word,xmlfile):
 #
 
 def main():
+	with open("segmented.csv", "w") as csvfile:
+		writer = csv.writer(csvfile)
 	
-	xmlfile = '1.xml'
-	for w in get_words(xmlfile):
-		wm = get_morphs(w,xmlfile)
-		wm = list(filter(lambda ch: ch not in "-", wm))
-		for i in range(len(wm)):
-			wm[i] = wm[i].lower()
-			wm[i] = ''.join(list(filter(lambda ch: ch not in " +.!¡¿?-,", wm[i])))
-		print(wm)
+		for xmlfile in xml_files:
 
+			print("processing: " + xmlfile)
+
+			for w in get_words(xmlfile):
+				wm = get_morphs(w,xmlfile)
+				if len(wm) == 1:
+					pass
+				else:
+					wm = list(filter(lambda ch: ch not in "-", wm))
+					for i in range(len(wm)):
+						wm[i] = wm[i].lower()
+						wm[i] = ''.join(list(filter(lambda ch: ch not in " +.!¡¿?-,", wm[i])))
+					writer.writerow([wm.pop(0), " ".join(wm)])
 
 if __name__ == '__main__':
 	main() 
