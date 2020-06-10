@@ -51,7 +51,7 @@ def main():
 	
 		for xmlfile in xml_files:
 
-			print("processing " + n + " of 21: " + xmlfile)
+			print("processing " + str(n) + " of 21: " + xmlfile)
 
 			n = n + 1
 
