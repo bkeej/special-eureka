@@ -46,8 +46,11 @@ def get_morphs(xmlfile):
 def get_pos(word,xmlfile):
 	tree = ET.parse(corpus_dir + xmlfile)
 	root = tree.getroot()
-
-	pos = root.find("./body/postags/phrase/pos[@morph_ref='" + word.get('morph_id') + "']").get('text')
+	
+	try:
+		pos = root.find("./body/postags/phrase/pos[@morph_ref='" + word.get('morph_id') + "']").get('text')
+	except AttributeError:
+		return ['err','err']
 
 	return [word.get('text'), pos]
 
@@ -72,9 +75,5 @@ def main():
 				mp[1] = mp[1].upper()
 				writer.writerow(mp)
 		
-
-		print(get_pos(m,'2.xml'))
-	# print(get_pos(get_morphs('2.xml')[0],'2.xml'))
-
 if __name__ == '__main__':
 	main() 
