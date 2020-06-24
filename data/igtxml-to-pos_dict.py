@@ -58,7 +58,7 @@ def get_pos(word,xmlfile):
 
 def main():
 
-	with open("pos.csv", "w") as csvfile:
+	with open("pos_dict.csv", "w") as csvfile:
 		writer = csv.writer(csvfile)
 
 		n = 1
