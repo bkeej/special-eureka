@@ -7,6 +7,7 @@ import pickle
 import random
 
 
+
 class AveragedPerceptron(object):
 
     '''An averaged perceptron, as implemented by Matthew Honnibal.
@@ -73,11 +74,15 @@ class AveragedPerceptron(object):
 
     def save(self, path):
         '''Save the pickled model weights.'''
-        return pickle.dump(dict(self.weights), open(path, 'w'))
+        return pickle.dump(dict(self.weights), open(path, 'wb'))
 
     def load(self, path):
-        '''Load the pickled model weights.'''
-        self.weights = pickle.load(open(path))
+        # '''Load the pickled model weights.'''
+        # self.weights = pickle.load(open(path, 'rb'))
+        model = pickle.load(open(path, 'rb'))
+        self.weights = model[0]
+        self.classes = model[2]
+
         return None
 
 def train(nr_iter, examples):
@@ -94,3 +99,4 @@ def train(nr_iter, examples):
                 model.update(class_, guess, features)
     model.average_weights()
     return model
+
