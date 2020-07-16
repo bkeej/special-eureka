@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import csv 
 import os
 import random
 from collections import defaultdict
@@ -8,24 +7,6 @@ import pickle
 import logging
 
 from averged_perceptron import AveragedPerceptron
-
-file = "../data/clean/pos_phrase-cleaned.csv"
-
-sentences = []
-
-with open(file, "r") as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    for line in csv_reader:
-        words = []
-        tags = []
-        for cell in line:
-            cells = cell.split()
-            words.append(cells[0])
-            tags.append(cells[1])
-        sentences.append((words,tags))
-
-
-
 
 
 class PerceptronTagger(object):
@@ -125,7 +106,3 @@ class PerceptronTagger(object):
 
 def _pc(n, d):
     return (float(n) / d) * 100
-
-
-trainer = PerceptronTagger()
-trainer.train(sentences, save_loc = "usp_pos_model")
