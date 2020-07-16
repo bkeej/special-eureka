@@ -1,14 +1,17 @@
 import csv
+from random import shuffle
 from collections import defaultdict
 from averged_perceptron import AveragedPerceptron
 from perceptron_tagger import PerceptronTagger
 
 
-file = "../data/clean/pos_phrase-cleaned.csv"
+data_file = '../data/clean/pos_phrase-cleaned.csv'
+
+model_file = 'usp_pos_model'
 
 sentences = []
 
-with open(file, "r") as csv_file:
+with open(data_file, "r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     for line in csv_reader:
         words = []
@@ -25,20 +28,29 @@ test_n = (round(len(sentences) * .30))
 
 train_n = total_n - test_n
 
-print("Number of sentences in corpus:", total_n, '\n')
+shuffle(sentences)
 
-print("Sampling", train_n, 'training sentences.\n')
+print('Number of sentences in corpus:', total_n, '\n')
 
-print("Sampling", test_n, 'testing sentences.\n')
+train = sentences[:train_n]
 
+print('Sampling', len(train), 'training sentences.\n')
 
-# trainer = PerceptronTagger()
-# trainer.train(sentences, save_loc = "usp_pos_model")
+test = sentences[train_n:]
 
+print('Sampling', len(test), 'testing sentences.\n')
 
+print('Training averaged perceptron part of speech tagger.\n')
 
+trainer = PerceptronTagger()
+trainer.train(train, save_loc = model_file)
 
+print('Model pickled and saved to', model_file, '\n')
 
+tester = AveragedPerceptron()
+tester.load(model_file)
+
+print('Testing', model_file, 'on', len(test), 'test sentences.\n')
 
 
 
