@@ -7,16 +7,9 @@ from collections import defaultdict
 import pickle
 import logging
 
-# from textblob.base import BaseTagger
-# from textblob.tokenizers import WordTokenizer, SentenceTokenizer
-# from textblob.exceptions import MissingCorpusError
 from averged_perceptron import AveragedPerceptron
 
-PICKLE = "trontagger-0.1.0.pickle"
-
 file = "../data/clean/pos_phrase-cleaned.csv"
-
-
 
 sentences = []
 
@@ -45,37 +38,11 @@ class PerceptronTagger(object):
 
     START = ['-START-', '-START2-']
     END = ['-END-', '-END2-']
-    AP_MODEL_LOC = os.path.join(os.path.dirname(__file__), PICKLE)
 
-    def __init__(self, load=True):
+    def __init__(self):
         self.model = AveragedPerceptron()
         self.tagdict = {}
         self.classes = set()
-        if load:
-            self.load(self.AP_MODEL_LOC)
-
-    def tag(self, corpus, tokenize=True):
-        '''Tags a string `corpus`.'''
-        # Assume untokenized corpus has \n between sentences and ' ' between words
-        s_split = SentenceTokenizer().tokenize if tokenize else lambda t: t.split('\n')
-        w_split = WordTokenizer().tokenize if tokenize else lambda s: s.split()
-        def split_sents(corpus):
-            for s in s_split(corpus):
-                yield w_split(s)
-
-        prev, prev2 = self.START
-        tokens = []
-        for words in split_sents(corpus):
-            context = self.START + words + self.END
-            for i, word in enumerate(words):
-                tag = self.tagdict.get(word)
-                if not tag:
-                    features = self._get_features(i, word, context, prev, prev2)
-                    tag = self.model.predict(features)
-                tokens.append((word, tag))
-                prev2 = prev
-                prev = tag
-        return tokens
 
     def train(self, sentences, save_loc=None, nr_iter=5):
         '''Train a model from sentences, and save it at ``save_loc``. ``nr_iter``
@@ -110,32 +77,6 @@ class PerceptronTagger(object):
             pickle.dump((self.model.weights, self.tagdict, self.classes),
                          open(save_loc, 'wb'), -1)
         return None
-
-    def load(self, loc):
-        '''Load a pickled model.'''
-        try:
-            w_td_c = pickle.load(open(loc, 'rb'))
-        except IOError:
-            raise Exception("missing pickle file")
-        self.model.weights, self.tagdict, self.classes = w_td_c
-        self.model.classes = self.classes
-        return None
-
-    # def _normalize(self, word):
-    #     '''Normalization used in pre-processing.
-    #     - All words are lower cased
-    #     - Digits in the range 1800-2100 are represented as !YEAR;
-    #     - Other digits are represented as !DIGITS
-    #     :rtype: str
-    #     '''
-    #     if '-' in word and word[0] != '-':
-    #         return '!HYPHEN'
-    #     elif word.isdigit() and len(word) == 4:
-    #         return '!YEAR'
-    #     elif word[0].isdigit():
-    #         return '!DIGITS'
-    #     else:
-    #         return word.lower()
 
     def _get_features(self, i, word, context, prev, prev2):
         '''Map tokens into a feature representation, implemented as a
@@ -186,6 +127,5 @@ def _pc(n, d):
     return (float(n) / d) * 100
 
 
-
-trainer = PerceptronTagger(load = False)
+trainer = PerceptronTagger()
 trainer.train(sentences, save_loc = "usp_pos_model")

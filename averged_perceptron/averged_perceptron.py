@@ -77,8 +77,7 @@ class AveragedPerceptron(object):
         return pickle.dump(dict(self.weights), open(path, 'wb'))
 
     def load(self, path):
-        # '''Load the pickled model weights.'''
-        # self.weights = pickle.load(open(path, 'rb'))
+        # '''Load the pickled model weights and classes, which live in a 3-tuple of dictionaries.'''
         model = pickle.load(open(path, 'rb'))
         self.weights = model[0]
         self.classes = model[2]
