@@ -5,7 +5,7 @@ from averged_perceptron import AveragedPerceptron
 from perceptron_tagger import PerceptronTagger
 
 
-data_file = '../data/clean/pos_phrase-cleaned.csv'
+data_file = '../data/clean/pos_phrase-cleaned-status-rev.csv'
 
 model_file = 'usp_pos_model'
 
@@ -37,7 +37,10 @@ def test_sentence(sent):
             y_hat = 'INC'
 
         elif word == 'r':
-            y_hat = 'E3'    
+            y_hat = 'E3'
+
+        elif word == 'j':
+            y_hat = 'E3'
 
         else:
             # y_hat = "ERR"
