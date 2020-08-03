@@ -42,6 +42,9 @@ def test_sentence(sent):
         elif word == 'j':
             y_hat = 'E3'
 
+        elif word == 'taq':
+            y_hat = 'PL'
+
         else:
             # y_hat = "ERR"
             y_hat = tester.predict(feat)
